@@ -6,6 +6,10 @@ import pandas as pd
 
 
 def plot_metrics(metrics_json_path):
+    # Check if path exists
+    if not os.path.exists(metrics_json_path):
+        raise ValueError(f'{metrics_json_path} does not exist. Please train the model first.')
+
     # Load metrics from the JSON file
     with open(metrics_json_path, 'r') as f:
         loaded_json = json.load(f)
@@ -20,7 +24,7 @@ def plot_metrics(metrics_json_path):
     plt.ylabel('Loss')
     plt.title('Training and Validation Loss Over Epochs')
     plt.legend()
-    __save_figures(f'metrics/figures/{model}_train_val_loss.png')
+    __save_figures(model, f'{model}_train_val_loss.png')
 
     # Plot validation accuracy, precision, recall, and F1 score
     plt.figure(2, figsize=(10, 5))
@@ -32,11 +36,17 @@ def plot_metrics(metrics_json_path):
     plt.ylabel('Metric Score')
     plt.title('Validation Accuracy, Precision, Recall, and F1 Score Over Epochs')
     plt.legend()
-    __save_figures(f'metrics/figures/{model}_val_metrics.png')
+    __save_figures(model, f'{model}_val_metrics.png')
 
     plt.show()
 
 
-def __save_figures(path: str):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    plt.savefig(path)
+def __save_figures(dirname: str, filename: str):
+    figure_dir = 'metrics/figures'
+    if dirname and filename:
+        save_location = f'{figure_dir}/{dirname}/{filename}'
+        os.makedirs(os.path.dirname(f'{save_location}'), exist_ok=True)
+        plt.savefig(save_location)
+    else:
+        raise ValueError('Please provide a valid directory and file name')
+
