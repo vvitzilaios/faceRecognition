@@ -16,7 +16,7 @@ def add_face(user_name):
 
         faces = face_detector.detect_faces(frame)
 
-        # Save each detected face
+        # Save detected faces
         for i, (x, y, w, h) in enumerate(faces):
             face_img = frame[y:y + h, x:x + w]
             cv2.imwrite(f'data/train/{user_name}/{i}.jpg', face_img)

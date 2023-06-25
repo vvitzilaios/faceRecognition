@@ -1,10 +1,7 @@
-import json
-
 import cv2
 import torch
 
-from models.model_one import ModelOne
-from utils.prepare_data import prepare_test_args, define_model
+from utils.prepare_data import define_model
 
 
 def run_model(args):
@@ -12,7 +9,7 @@ def run_model(args):
 
     # Load the model
     model = define_model(selected_model, num_classes).to(device)
-    model.load_state_dict(torch.load(f'{selected_model}.pth', map_location=device))
+    model.load_state_dict(torch.load(f'models/pth/{selected_model}.pth', map_location=device))
 
     # Start the camera feed
     cap = cv2.VideoCapture(0)
