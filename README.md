@@ -37,7 +37,9 @@ This project provides the following scripts:
     ###
 3. `plot.py`: This script plots the training and validation loss and accuracy of a model.
     #### Arguments:
-    - `--model`: The name of the model to be plotted.
+    - `--json`: The name of the `.json` file containing the metrics of the model.
+    - `--save`: Whether to save the produced figures or not.
+    - `--plot-epochs`: Plot specific epochs. If empty then all epochs will be plotted.
     #### Example:
     ```bash
     python plot.py --model "model_one"

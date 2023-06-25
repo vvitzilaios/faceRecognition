@@ -7,8 +7,7 @@ import pandas as pd
 import seaborn as sns
 
 
-
-def plot_metrics(metrics_json_path):
+def plot_metrics(metrics_json_path, save=False, plot_epochs=None):
     # Check if path exists
     if not os.path.exists(metrics_json_path):
         raise ValueError(f'{metrics_json_path} does not exist. Please train the model first.')
@@ -27,16 +26,47 @@ def plot_metrics(metrics_json_path):
     labels = [class_map[str(i)] for i in range(len(class_map))]
 
     # Plot training and validation loss
-    plt.figure(1, figsize=(10, 5))
-    plt.plot(metrics_data['epoch'], metrics_data['train_loss'], label='Training Loss')
-    plt.plot(metrics_data['epoch'], metrics_data['val_loss'], label='Validation Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title('Training and Validation Loss Over Epochs')
-    plt.legend()
-    __save_figures(model, f'{model}_train_val_loss.png')
+    __plot_train_val_loss(metrics_data, model, save)
 
     # Plot validation accuracy, precision, recall, and F1 score
+    __plot_val_results(metrics_data, model, save)
+
+    # plot confusion matrix for specific epoch
+    if plot_epochs:
+        for epoch in plot_epochs:
+            __plot_epoch_conf_mat(metrics_data, model, labels, epoch, save)
+    else:
+        # Plot the confusion matrices for each epoch
+        __plot_all_conf_mats(labels, metrics_data, model, save)
+
+    plt.show()
+
+
+def __plot_epoch_conf_mat(metrics_data, model, labels, epoch, save=False):
+    val_cm_series = metrics_data['val_cm']
+    val_cm = val_cm_series[epoch - 1]
+    plt.figure(figsize=(10, 5))
+    sns.heatmap(np.array(val_cm), annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
+    plt.title(f'Confusion Matrix for Epoch {epoch}')
+    plt.ylabel('Actual Class')
+    plt.xlabel('Predicted Class')
+    if save:
+        __save_figures(f'{model}/conf_matrices', f'{model}_val_cm_epoch_{epoch}.png')
+
+
+def __plot_all_conf_mats(labels, metrics_data, model, save=False):
+    val_cm_series = metrics_data['val_cm']
+    for idx, val_cm in enumerate(val_cm_series):
+        plt.figure(figsize=(10, 5))
+        sns.heatmap(np.array(val_cm), annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
+        plt.title(f'Confusion Matrix for Epoch {idx + 1}')
+        plt.ylabel('Actual Class')
+        plt.xlabel('Predicted Class')
+        if save:
+            __save_figures(f'{model}/conf_matrices', f'{model}_val_cm_epoch_{idx + 1}.png')
+
+
+def __plot_val_results(metrics_data, model, save=False):
     plt.figure(2, figsize=(10, 5))
     plt.plot(metrics_data['epoch'], metrics_data['val_accuracy'], label='Accuracy')
     plt.plot(metrics_data['epoch'], metrics_data['val_precision'], label='Precision')
@@ -46,19 +76,20 @@ def plot_metrics(metrics_json_path):
     plt.ylabel('Metric Score')
     plt.title('Validation Accuracy, Precision, Recall, and F1 Score Over Epochs')
     plt.legend()
-    __save_figures(model, f'{model}_val_metrics.png')
+    if save:
+        __save_figures(model, f'{model}_val_metrics.png')
 
-    # Plot the confusion matrix
-    val_cm_series = metrics_data['val_cm']
-    for idx, val_cm in enumerate(val_cm_series):
-        plt.figure(figsize=(10, 5))
-        sns.heatmap(np.array(val_cm), annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
-        plt.title(f'Confusion Matrix for Epoch {idx + 1}')
-        plt.ylabel('Actual Class')
-        plt.xlabel('Predicted Class')
-        __save_figures(f'{model}/conf_matrices', f'{model}_val_cm_epoch_{idx + 1}.png')
 
-    plt.show()
+def __plot_train_val_loss(metrics_data, model, save=False):
+    plt.figure(1, figsize=(10, 5))
+    plt.plot(metrics_data['epoch'], metrics_data['train_loss'], label='Training Loss')
+    plt.plot(metrics_data['epoch'], metrics_data['val_loss'], label='Validation Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss Over Epochs')
+    plt.legend()
+    if save:
+        __save_figures(model, f'{model}_train_val_loss.png')
 
 
 def __save_figures(dirname: str, filename: str):
@@ -69,4 +100,3 @@ def __save_figures(dirname: str, filename: str):
         plt.savefig(save_location)
     else:
         raise ValueError('Please provide a valid directory and file name')
-
