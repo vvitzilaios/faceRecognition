@@ -12,7 +12,31 @@ To install and use this project, follow these steps:
 2. Navigate to the directory: `cd faceRecognition`
 3. Install required Python packages: `pip3 install -r requirements.txt`
 
-## Usage
+## Information
+ 
+### Models
+
+This project provides the following models:
+1. `model_one.py`: A simple CNN model with 2 convolutional layers and 3 fully connected layers.
+2. `model_two.py`: A simple CNN model with 3 convolutional layers and 3 fully connected layers.
+
+**Note:** Training those models will create a `.pth` file of the same name under the `models` directory.
+
+### Dataset
+
+For this project, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
+This because it was not feasible to train a model by only using the `add_face.py` or by using the whole LFW dataset.
+
+### Metrics
+
+By training a model, the following metrics are calculated and saved in a `.json` file inside the `metrics/performance/` directory
+1. Accuracy
+2. Precision
+3. Recall
+4. F1 Score
+
+**Note:** One may also find the produced figures of the training and validation loss and accuracy inside the `metrics/figures/` 
+directory, saved in `.png` format.
 
 ## Scripts
 
@@ -21,6 +45,9 @@ This project provides the following scripts:
 1. `add_face.py`: This script adds what is recognized as a face to the dataset using a live feed from a camera.
     #### Arguments:
     - `--name`: The name of the person to be added.
+    #### Side Effects:
+    - A window will open with the live feed from the camera.
+    - A directory with the name of the person will be created under the `data` directory.
     #### Example:
     ```bash
     python add_face.py --name "John Doe"
@@ -30,6 +57,8 @@ This project provides the following scripts:
     #### Arguments:
     - `--model`: The name of the model to be trained.
     - `--epochs`: The number of epochs to train the model for.
+    #### Side Effects:
+    - A `.pth` file with the name of the model will be created under the `models` directory.
     #### Example:
     ```bash
     python train.py --model "model_one" --epochs 10
@@ -40,6 +69,9 @@ This project provides the following scripts:
     - `--json`: The name of the `.json` file containing the metrics of the model.
     - `--save`: Whether to save the produced figures or not.
     - `--plot-epochs`: Plot specific epochs. If empty then all epochs will be plotted.
+    #### Side Effects:
+    - Directories `metrics`, `metrics/performance` and `metrics/figures` will be created, depending on the above arguments.
+    - `.png` files with a custom name will be created under the `metrics/figures` directory. Same goes for confusion matrices.
     #### Example:
     ```bash
     python plot.py --model "model_one"
@@ -48,33 +80,12 @@ This project provides the following scripts:
 4. `run.py`: This script runs the model on live feed from a camera.
     #### Arguments:
     - `--model`: The name of the model to be run.
+    #### Side Effects:
+    - A window will open with the live feed from the camera. The recognized faces will be marked with a green rectangle.
     #### Example:
     ```bash
     python run.py --model "model_one"
     ```
-   
-## Models
-
-This project provides the following models:
-1. `model_one.py`: A simple CNN model with 2 convolutional layers and 3 fully connected layers.
-2. `model_two.py`: A simple CNN model with 3 convolutional layers and 3 fully connected layers.
-
-Training those models will create a `.pth` file of the same name under the `models` directory.
-
-## Dataset
-
-For this project, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
-This because it was not feasible to train a model by only using the `add_face.py` or by using the whole LFW dataset.
-
-## Metrics
-
-By training a model, the following metrics are calculated and saved in a `.json` file inside the `metrics/performance/` directory
-1. Accuracy
-2. Precision
-3. Recall
-4. F1 Score
-
-One can also find the produced figures of the training and validation loss and accuracy inside the `metrics/figures/` 
-directory, saved in `.png` format.
+  
 
 
