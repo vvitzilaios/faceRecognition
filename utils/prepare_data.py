@@ -20,14 +20,20 @@ def prepare_train_data(selected_model: str):
         transforms.RandomRotation(10),
         transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5], [0.5])
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+    ])
+
+    transform_val = transforms.Compose([
+        transforms.Resize((250, 250)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
     # Load the training & validation data
     train_data = datasets.ImageFolder(root='data/train', transform=data_transform)
     train_loader = DataLoader(train_data, batch_size=4, shuffle=True)
 
-    val_data = datasets.ImageFolder(root='data/val', transform=data_transform)
+    val_data = datasets.ImageFolder(root='data/val', transform=transform_val)
     val_loader = DataLoader(val_data, batch_size=4, shuffle=True)
 
     num_classes = __calculate_num_classes(train_data.class_to_idx)
