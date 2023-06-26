@@ -7,7 +7,7 @@ from utils.run_model import run_model
 def main():
     # Pass the trained model to run as an argument
     parser = argparse.ArgumentParser(description='Run a face recognition model')
-    parser.add_argument('--model', type=str, help='Model to run', required=True)
+    parser.add_argument('--model', type=int, help='Model to run', required=True)
 
     inpout = parser.parse_args()
 

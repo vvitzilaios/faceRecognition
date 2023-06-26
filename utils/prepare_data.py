@@ -5,8 +5,9 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 
-from models.model_one import ModelOne
-from models.model_two import ModelTwo
+from models.model_1 import ModelOne
+from models.model_2 import ModelTwo
+from models.model_3 import ModelThree
 from utils.dataset_info import DatasetInfo
 from utils.test_args import TestArgs
 
@@ -51,10 +52,11 @@ def prepare_test_args(selected_model: str):
     return TestArgs(selected_model, num_classes, class_to_label, device, face_cascade)
 
 
-def define_model(selected_model: str, num_classes: int):
+def define_model(selected_model: int, num_classes: int):
     models = {
-        'model_one': ModelOne(num_classes),
-        'model_two': ModelTwo(num_classes)
+        1: ModelOne(num_classes),
+        2: ModelTwo(num_classes),
+        3: ModelThree(num_classes)
     }
 
     if selected_model in models:
