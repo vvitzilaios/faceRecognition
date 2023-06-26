@@ -53,7 +53,7 @@ def train_classifier(args, num_epochs: int):
             loss = criterion(outputs, labels)
             validation_loss += loss.item()
 
-        # Calculate the metrics
+        # Calculate the metrics using sklearn methods
         val_accuracy = accuracy_score(all_val_labels, all_val_preds)
         val_precision = precision_score(all_val_labels, all_val_preds, average='macro', zero_division=1)
         val_recall = recall_score(all_val_labels, all_val_preds, average='macro')

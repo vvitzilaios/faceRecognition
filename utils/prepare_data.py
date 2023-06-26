@@ -13,10 +13,14 @@ from utils.test_args import TestArgs
 
 
 def prepare_train_data(selected_model: str):
-    # Preprocess the data
+    # Preprocess and normalize the data
     data_transform = transforms.Compose([
         transforms.Resize((250, 250)),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(10),
+        transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)),
         transforms.ToTensor(),
+        transforms.Normalize([0.5], [0.5])
     ])
 
     # Load the training & validation data
