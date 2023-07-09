@@ -27,6 +27,8 @@ This project provides the following models:
 For this project, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
 This because it was not feasible to train a model by only using the `add_face.py` or by using the whole LFW dataset.
 
+#### The dataset used for this project can be found in the following [Google Drive link](https://drive.google.com/file/d/1UDZv-oiOtbRvNZm85ahVUBoHby5Gcah5/view?usp=share_link).
+
 ### Metrics
 
 By training a model, the following metrics are calculated and saved in a `.json` file inside the `metrics/performance/` directory
@@ -46,8 +48,8 @@ This project provides the following scripts:
     #### Arguments:
     - `--name`: The name of the person to be added.
     #### Side Effects:
-    - A window will open with the live feed from the camera.
-    - A directory with the name of the person will be created under the `data` directory.
+    - A window will open with the live feed from the camera detecting the closest to camera face (by size).
+    - A directory with the name of the person will be created under the `data/dataset` directory.
     #### Example:
     ```bash
     python add_face.py --name "John Doe"

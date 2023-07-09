@@ -8,4 +8,5 @@ scikit-learn==1.2.2
 matplotlib==3.7.1
 pandas==2.0.2
 seaborn==0.12.2
+split-folders==0.4.3
 

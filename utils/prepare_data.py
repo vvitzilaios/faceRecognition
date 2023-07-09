@@ -2,6 +2,7 @@ import json
 
 import cv2
 import torch
+import splitfolders
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 
@@ -13,6 +14,8 @@ from utils.test_args import TestArgs
 
 
 def prepare_train_data(selected_model: str):
+    __split_data('data/dataset', 'data', ratio=(0.8, 0.2))
+
     # Preprocess and normalize the data
     data_transform = transforms.Compose([
         transforms.Resize((250, 250)),
@@ -20,14 +23,20 @@ def prepare_train_data(selected_model: str):
         transforms.RandomRotation(10),
         transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5], [0.5])
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+    ])
+
+    transform_val = transforms.Compose([
+        transforms.Resize((250, 250)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
     # Load the training & validation data
     train_data = datasets.ImageFolder(root='data/train', transform=data_transform)
     train_loader = DataLoader(train_data, batch_size=4, shuffle=True)
 
-    val_data = datasets.ImageFolder(root='data/val', transform=data_transform)
+    val_data = datasets.ImageFolder(root='data/val', transform=transform_val)
     val_loader = DataLoader(val_data, batch_size=4, shuffle=True)
 
     num_classes = __calculate_num_classes(train_data.class_to_idx)
@@ -67,6 +76,10 @@ def define_model(selected_model: int, num_classes: int):
         return models[selected_model]
     else:
         raise ValueError(f'Invalid model name, choose from {list(models.keys())}')
+
+
+def __split_data(input_folder, output_folder, ratio):
+    splitfolders.ratio(input_folder, output=output_folder, seed=1337, ratio=ratio, group_prefix=None)
 
 
 def __calculate_num_classes(class_to_idx: dict):
