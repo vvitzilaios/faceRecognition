@@ -13,6 +13,19 @@ To install and use this project, follow these steps:
 3. Install required Python packages: `pip3 install -r requirements.txt`
 
 ## Information
+
+### Usage
+
+To successfully use this project, follow these steps:
+1. Add a face to the dataset by running the `add_face.py` script.
+2. A window will open with the live feed from the camera detecting the closest to camera face (by size). 
+3. Press `s` in order to capture the face and add it to the dataset.
+4. Repeat steps 1-3 for as many faces as you want.
+5. Train a model by running the `train.py` script.
+6. Plot the training and validation loss and accuracy of the model by running the `plot.py` script.
+7. Run the model on live feed from a camera by running the `run.py` script.
+
+**Note:** For more details and examples, see the [Scripts](#scripts) section.
  
 ### Models
 
@@ -27,7 +40,7 @@ This project provides the following models:
 For this project, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
 This because it was not feasible to train a model by only using the `add_face.py` or by using the whole LFW dataset.
 
-#### The dataset used for this project can be found in the following [Google Drive link](https://drive.google.com/file/d/1UDZv-oiOtbRvNZm85ahVUBoHby5Gcah5/view?usp=share_link).
+**Note:**  The dataset used for this project can be found in the following [Google Drive link](https://drive.google.com/file/d/1UDZv-oiOtbRvNZm85ahVUBoHby5Gcah5/view?usp=share_link).
 
 ### Metrics
 
