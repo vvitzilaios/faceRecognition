@@ -1,30 +1,19 @@
-import logging
 import os
+from loguru import logger
 
+# Get the directory of the project
+project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-class Logger:
-    def __init__(self, name, level=logging.INFO):
-        self.logger = logging.getLogger(name)
-        self.logger.setLevel(level)
+# Create the logs directory under the project directory
+log_dir = os.path.join(project_dir, 'logs')
+os.makedirs(log_dir, exist_ok=True)
 
-        # create console handler with a specific level
-        ch = logging.StreamHandler()
-        ch.setLevel(level)
-
-        # create file handler which logs even debug messages
-        if not os.path.exists('log'):
-            os.makedirs('log')
-        fh = logging.FileHandler('log/app.log')
-        fh.setLevel(level)
-
-        # create formatter and add it to the handlers
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
-        fh.setFormatter(formatter)
-
-        # add the handlers to the logger
-        self.logger.addHandler(ch)
-        self.logger.addHandler(fh)
-
-
-logger = Logger(__name__).logger
+# Configure the logger
+logger.add(
+    os.path.join(log_dir, 'app.log'),
+    level='INFO',
+    rotation='10 MB',
+    compression='zip',
+    enqueue=True,
+    format='<green>{time:YYYY-MM-DD HH:mm:ss}</green> | {level} | {message}'
+)
