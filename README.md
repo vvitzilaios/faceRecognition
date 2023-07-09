@@ -30,17 +30,20 @@ To successfully use this project, follow these steps:
 ### Models
 
 This project provides the following models:
-1. `model_one.py`: A simple CNN model with 2 convolutional layers and 3 fully connected layers.
-2. `model_two.py`: A simple CNN model with 3 convolutional layers and 3 fully connected layers.
+1. `model_1.py`: A simple CNN model with 2 convolutional layers and 3 fully connected layers.
+2. `model_2.py`: A simple CNN model with 3 convolutional layers and 3 fully connected layers.
+3. `model_3.py`: A more complex CNN model with 3 convolutional layers and 3 fully connected layers. Dropout and batch normalization also applied.
 
 **Note:** Training those models will create a `.pth` file of the same name under the `models` directory.
 
 ### Dataset
 
-For this project, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
+For this project, at first, parts of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset were used.
 This because it was not feasible to train a model by only using the `add_face.py` or by using the whole LFW dataset.
 
-**Note:**  The dataset used for this project can be found in the following [Google Drive link](https://drive.google.com/file/d/1UDZv-oiOtbRvNZm85ahVUBoHby5Gcah5/view?usp=share_link).
+The second variation of data used for this project was [Celebrity Face Image Dataset](https://www.kaggle.com/datasets/vishesh1412/celebrity-face-image-dataset?resource=download)
+
+**Note:** The datasets used for this project can be found in the following Google Drive [link](https://drive.google.com/file/d/1UDZv-oiOtbRvNZm85ahVUBoHby5Gcah5/view?usp=share_link) under data.zip and data_2.zip.
 
 ### Metrics
 
@@ -49,6 +52,7 @@ By training a model, the following metrics are calculated and saved in a `.json`
 2. Precision
 3. Recall
 4. F1 Score
+5. Confusion Matrix
 
 **Note:** One may also find the produced figures of the training and validation loss and accuracy inside the `metrics/figures/` 
 directory, saved in `.png` format.
@@ -70,18 +74,20 @@ This project provides the following scripts:
     ###
 2. `train.py`: This script trains a model using the dataset.
     #### Arguments:
-    - `--model`: The name of the model to be trained.
-    - `--epochs`: The number of epochs to train the model for.
+    - `--dataset`: The dir path of the dataset to be used. Default = "dataset".
+    - `--model`: The number of the model to be trained.
+    - `--epochs`: The number of epochs to train the model for. Default = 20.
+    - `--patience`: The number of epochs to wait before early stopping. Default = 10.
     #### Side Effects:
     - A `.pth` file with the name of the model will be created under the `models` directory.
     #### Example:
     ```bash
-    python train.py --model "model_one" --epochs 10
+    python train.py --model 1 --epochs 10
     ```
     ###
 3. `plot.py`: This script plots the training and validation loss and accuracy of a model.
     #### Arguments:
-    - `--json`: The name of the `.json` file containing the metrics of the model.
+    - `--json`: The name of the `.json` file containing the metrics of the model. Training results can be found inside the `metrics/performance` directory.
     - `--save`: Whether to save the produced figures or not.
     - `--plot-epochs`: Plot specific epochs. If empty then all epochs will be plotted.
     #### Side Effects:
@@ -89,7 +95,7 @@ This project provides the following scripts:
     - `.png` files with a custom name will be created under the `metrics/figures` directory. Same goes for confusion matrices.
     #### Example:
     ```bash
-    python plot.py --model "model_one"
+    python plot.py --json "metrics/performance/model_1_metrics.json" --save True --plot-epochs 1 2 3 4 5
     ```
     ###
 4. `run.py`: This script runs the model on live feed from a camera.

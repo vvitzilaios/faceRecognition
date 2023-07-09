@@ -1,7 +1,8 @@
 import cv2
 import torch
 
-from utils.prepare_data import define_model
+from util.logger import logger
+from util.prepare_data import define_model
 
 
 def run_model(args):
@@ -12,6 +13,7 @@ def run_model(args):
     model.load_state_dict(torch.load(f'models/pth/{selected_model}.pth', map_location=device))
 
     # Start the camera feed
+    logger.info('Starting camera feed...')
     cap = cv2.VideoCapture(0)
 
     while True:
@@ -53,6 +55,7 @@ def run_model(args):
         cv2.imshow('Image', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            logger.info('Stopping camera feed...')
             break
 
     cap.release()
