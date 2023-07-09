@@ -6,18 +6,20 @@ import splitfolders
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 
-from models.model_1 import ModelOne
-from models.model_2 import ModelTwo
-from models.model_3 import ModelThree
-from utils.dataset_info import DatasetInfo
-from utils.test_args import TestArgs
+from model.model_1 import ModelOne
+from model.model_2 import ModelTwo
+from model.model_3 import ModelThree
+from util.dataset_info import DatasetInfo
+from util.logger import logger
+from util.test_args import TestArgs
 
 
-def prepare_train_data(selected_model: str):
-    __split_data('data/dataset', 'data', ratio=(0.8, 0.2))
+def prepare_train_data(selected_model: str, dataset_path: str):
+    logger.info('Preparing training data...')
+    __split_data(dataset_path, 'data', ratio=(0.8, 0.2))
 
     # Preprocess and normalize the data
-    data_transform = transforms.Compose([
+    transform_train_data = transforms.Compose([
         transforms.Resize((250, 250)),
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(10),
@@ -26,17 +28,17 @@ def prepare_train_data(selected_model: str):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
-    transform_val = transforms.Compose([
+    transform_val_data = transforms.Compose([
         transforms.Resize((250, 250)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
     # Load the training & validation data
-    train_data = datasets.ImageFolder(root='data/train', transform=data_transform)
+    train_data = datasets.ImageFolder(root='data/train', transform=transform_train_data)
     train_loader = DataLoader(train_data, batch_size=4, shuffle=True)
 
-    val_data = datasets.ImageFolder(root='data/val', transform=transform_val)
+    val_data = datasets.ImageFolder(root='data/val', transform=transform_val_data)
     val_loader = DataLoader(val_data, batch_size=4, shuffle=True)
 
     num_classes = __calculate_num_classes(train_data.class_to_idx)
@@ -79,6 +81,7 @@ def define_model(selected_model: int, num_classes: int):
 
 
 def __split_data(input_folder, output_folder, ratio):
+    logger.info(f'Splitting data into train and validation sets using \'{input_folder}\' as the source directory......')
     splitfolders.ratio(input_folder, output=output_folder, seed=1337, ratio=ratio, group_prefix=None)
 
 
@@ -87,7 +90,7 @@ def __calculate_num_classes(class_to_idx: dict):
     idx_to_class = {idx: class_ for class_, idx in class_to_idx.items()}
 
     # Save the mapping to a file
-    with open('class_to_label.json', 'w') as f:
-        json.dump(idx_to_class, f)
+    with open('data/class_to_label.json', 'w') as f:
+        json.dump(idx_to_class, f, indent=4)
 
     return len(class_to_idx)

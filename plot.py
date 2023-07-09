@@ -1,6 +1,6 @@
 import argparse
 
-from utils.metrics_plot import plot_metrics
+from service.plot_service import plot_metrics
 
 
 def main():

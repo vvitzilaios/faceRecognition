@@ -1,7 +1,7 @@
 import argparse
 
-from utils.prepare_data import prepare_test_args
-from utils.run_model import run_model
+from util.prepare_data import prepare_test_args
+from service.run_service import run_model
 
 
 def main():

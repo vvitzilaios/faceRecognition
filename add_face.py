@@ -1,6 +1,6 @@
 import cv2
 import os
-from utils.face_detector import FaceDetector
+from util.face_detector import FaceDetector
 import numpy as np
 
 
