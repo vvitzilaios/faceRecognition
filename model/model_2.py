@@ -13,7 +13,7 @@ class ModelTwo(nn.Module):
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3)
         self.conv3 = nn.Conv2d(128, 256, kernel_size=3)
         # Fully connected layers
-        self.fc1 = nn.Linear(256 * 29 * 29, 120)
+        self.fc1 = nn.Linear(256 * 30 * 30, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, self.num_classes)
 
@@ -21,7 +21,7 @@ class ModelTwo(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = self.pool(F.relu(self.conv3(x)))
-        x = x.view(-1, 256 * 29 * 29)
+        x = x.view(-1, 256 * 30 * 30)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)

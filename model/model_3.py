@@ -21,7 +21,7 @@ class ModelThree(nn.Module):
         self.dropout = nn.Dropout(0.5)
 
         # Fully connected layers
-        self.fc1 = nn.Linear(256 * 29 * 29, 120)
+        self.fc1 = nn.Linear(256 * 30 * 30, 120)
         self.bn4 = nn.BatchNorm1d(120)
         self.fc2 = nn.Linear(120, 84)
         self.bn5 = nn.BatchNorm1d(84)
@@ -31,7 +31,7 @@ class ModelThree(nn.Module):
         x = self.pool(F.relu(self.bn1(self.conv1(x))))
         x = self.pool(F.relu(self.bn2(self.conv2(x))))
         x = self.pool(F.relu(self.bn3(self.conv3(x))))
-        x = x.view(-1, 256 * 29 * 29)
+        x = x.view(-1, 256 * 30 * 30)
         x = self.dropout(F.relu(self.bn4(self.fc1(x))))
         x = self.dropout(F.relu(self.bn5(self.fc2(x))))
         x = self.fc3(x)

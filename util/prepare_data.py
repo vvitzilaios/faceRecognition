@@ -20,7 +20,7 @@ def prepare_train_data(selected_model: str, dataset_path: str):
 
     # Preprocess and normalize the data
     transform_train_data = transforms.Compose([
-        transforms.Resize((250, 250)),
+        transforms.Resize((256, 256)),
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(10),
         transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)),
@@ -29,7 +29,7 @@ def prepare_train_data(selected_model: str, dataset_path: str):
     ])
 
     transform_val_data = transforms.Compose([
-        transforms.Resize((250, 250)),
+        transforms.Resize((256, 256)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])

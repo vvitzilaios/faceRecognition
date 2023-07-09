@@ -31,7 +31,7 @@ def run_model(args):
             face = frame[y:y + h, x:x + w]
 
             # Preprocess the face
-            face = cv2.resize(face, (250, 250))
+            face = cv2.resize(face, (256, 256))
             face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
             face = face / 255.0
             face = torch.from_numpy(face).float()
